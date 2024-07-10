@@ -1,8 +1,7 @@
-1	तथा	तथा	CC	CC	_	0	main	_	_
-2	इसी	इसी	DEM	DEM	_	3	nmod__adj	_	_
-3	कारण	कारण	NN	NN	_	6	rh	_	_
-4	वायु	वायु	NN	NN	_	6	k1	_	_
-5	ऊपर	ऊपर	NST	NST	_	6	k7	_	_
-6	उठती	उठती	VM	VM	_	1	ccof	_	_
-7	है	है	VAUX	VAUX	_	6	lwg__vaux	_	_
+1	बल्कि	बल्कि	CC	CC	_	0	main	_	_
+2	वे	वे	PRP	PRP	_	5	k1	_	_
+3	समझदार	समझदार	JJ	JJ	_	5	k1s	_	_
+4	भी	भी	RP	RP	_	3	lwg__rp	_	_
+5	थे	थे	VM	VM	_	1	ccof	_	_
+6	।	।	SYM	SYM	_	1	rsym	_	_
 

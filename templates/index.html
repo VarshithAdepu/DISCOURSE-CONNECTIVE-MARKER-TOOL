@@ -108,7 +108,7 @@
 
         #discourseOutput {
             width: calc(100% - 20px);
-            height: 350px;
+            height: 250px;
             font-size: 1em;
             resize: both;
             overflow: auto;
@@ -259,10 +259,16 @@
 }
 
 function processDiscourse() {
+    // Save the text in the "Simplified" container to sentence_output.txt
+    // saveModifiedText();
+
     var output = document.getElementById("output").value;
+    // document.getElementById('loading-spinner').style.display = 'block';
+    saveSimplifiedText(output);
 
     // Make an AJAX request to the server to run the discourse_sent.py script
     var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/process_discourse', true);
     xhr.open('POST', '/run_discourse_sent', true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
@@ -272,10 +278,10 @@ function processDiscourse() {
             // Highlight specific words in the result
             var highlightedResult = result;
             var wordsToHighlight = [
-                'समुच्चय', 'अन्यत्र', 'समानकाल', 'विरोधि', 'व्याभिचार', 'कार्य-कारण',
-                'वाक्य-कर्म', 'आवश्यकता-परिणाम', 'विरोधी.विपरीत', 'विरोधी_द्योतक',
-                'समुच्चय.समावेशी', 'समुच्चय.Inclusive', 'वाक्य-कर्म', 'विरोधि.viparIwa',
-                'परिणाम', 'विरोधि_द्योतक', 'समुच्चय.BI_1', 'समुच्चय.x', 'समुच्चय दोतक',
+                'समुच्चय', 'अन्यत्र', 'समानकाल', 'विरोधी', 'व्याभिचार', 'कार्य-कारण','-कारण',
+                'वाक्य-कर्म','-कर्म', 'आवश्यकता','आवश्यकता-परिणाम', 'विरोधी.विपरीत','.विपरीत','विरोधी_द्योतक','_द्योतक',
+                'समुच्चय.समावेशी', 'समुच्चय.Inclusive', 'वाक्य-कर्म', 'विरोधि.viparIwa','.viparIwa',
+                'परिणाम', 'समुच्चय.BI_1', 'समुच्चय.x', 'समुच्चय दोतक',
                 'इसके परिणाम स्वरुप'
             ];
 
@@ -294,9 +300,10 @@ function processDiscourse() {
 
             // Update the discourseOutputDiv with the formatted result
             document.getElementById("discourseOutput").innerHTML = formattedResult;
-
+            // var simplifiedContainer = document.getElementById("output").value;
+            // saveSimplifiedText(simplifiedContainer);
             // Write the output to the file
-            saveModifiedText(result);
+            // saveModifiedText(result);
         } else {
             // Handle the error
             console.error('Failed to run discourse_sent.py:', xhr.statusText);
@@ -304,6 +311,20 @@ function processDiscourse() {
     };
     xhr.send('output=' + encodeURIComponent(output));
 }
+function saveSimplifiedText(text) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/save_to_file', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log("Simplified text saved successfully");
+            } else {
+                console.error("Error saving simplified text");
+            }
+        };
+        var data = JSON.stringify({ text: text });
+        xhr.send(data);
+    }
 function saveModifiedText() {
     var modifiedText = document.getElementById('discourseOutput').innerText;
     var xhr = new XMLHttpRequest();

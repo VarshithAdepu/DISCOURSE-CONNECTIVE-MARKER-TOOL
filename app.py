@@ -16,13 +16,27 @@ def process_input():
 
 @app.route('/process_discourse', methods=['POST'])
 def process_discourse():
-    input_text = request.form['output']
-    result_text, relation_list = run_discourse_script(input_text)
-    output_data = {
-        'result_text': result_text,
-        'relation': relation_list
-    }
-    return jsonify(output_data)
+    simplified_text = request.form['output']
+    
+    try:
+        save_simplified_text(simplified_text)
+        result_text, relation_list = run_discourse_script(simplified_text)
+        output_data = {
+            'result_text': result_text,
+            'relation': relation_list
+        }
+        return jsonify(output_data)
+    except Exception as e:
+        return str(e), 500
+
+    # return jsonify(output_data)
+
+def save_simplified_text(simplified_text):
+    try:
+        with open('sentence_output.txt', 'w') as file:
+            file.write(simplified_text)
+    except Exception as e:
+        raise Exception(f"Error saving simplified text: {e}")
 
 def run_python_script(input_text):  
     script_path = 'sentence_subparts.py'
@@ -70,7 +84,7 @@ def run_discourse_sent():
         raise Exception(f"Subprocess failed in discourse_sent with error: {result.stderr}")
 
     # Read and return the output of the script
-    with open('sentence_output.txt', 'r') as result_file:
+    with open('output_discource.txt', 'r') as result_file:
         result_text = result_file.read()
 
     return result_text
@@ -80,12 +94,10 @@ def save_to_file():
     data = request.json
     modified_text = data.get('text', '')
 
-    with open('sentence_output.txt', 'w') as file:
+    with open('output_discource.txt', 'w') as file:
         file.write(modified_text)
 
     return jsonify({'message': 'Text saved successfully'})
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)

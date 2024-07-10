@@ -69,7 +69,18 @@ def read_lines(file_path):
         return file.readlines()
     
 def get_ids(sent):
-
+    # if '=' and'>' in sent.split()[0]:
+    #     pattern = r'=(.*?)>'
+    #     match1 = re.search(pattern, sent)
+    #     if match1:
+    #         return match1.group(1)
+    #     else:
+    #         return None
+    # else:
+    #     print(sent.split()[0],'llllll')
+    #     id=sent.split()[0]
+    #     return id
+    
     pattern1 = re.compile(r'(\w+_\w+_\w+_\w+-\w+_\d+[a-zA-Z]?)')
     match1 = re.search(pattern1, sent)
     
@@ -84,7 +95,22 @@ def get_ids(sent):
         return None
 
 def to_check_same_ids(sent):
-    
+    # if '=' and'>' in sent.split()[0]:
+    #     pattern = r'=(.*?)[a-zA-Z]?>'
+    #     match1 = re.search(pattern, sent)
+    #     if match1:
+    #         return match1.group(1)
+    #     else:
+    #         return None
+    # else:
+    #     pattern = r'(.*?)[a-zA-Z]?'
+
+    #     # Find the match for string1
+    #     match1 = re.search(pattern, sent)
+    #     if match1:
+    #         return match1.group(1)
+    #     else:
+    #         return None
     pattern1 = r"(\w+_\w+_\w+_\w+-\w+_\d+)"
     match1 = re.search(pattern1, sent)
     pattern2 = r"(\d+)"
@@ -145,10 +171,10 @@ def parse_discourse_lines(lines):
                             store.append(l2[n])
                         # print("s",store)
 
-                        with open(file_path, 'w') as file:
+                        with open(file_path_1, 'w') as file:
                             for n in range(len(store)):
                                 file.write(store[n].replace('\n', '').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>','<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]').replace("यद्यपि ",'') + '\n')
-                        return process_discourse(file_path)
+                        return process_discourse(file_path_1)
                     else:
                         for j in range(0, i):
                             l1.append(lines[j])
@@ -166,15 +192,15 @@ def parse_discourse_lines(lines):
                         for n in range(0, len(l2)):
                             store.append(l2[n])
                         m += 1
-                        with open(file_path, 'w') as file:
+                        with open(file_path_1, 'w') as file:
                             for n in range(len(store)):
                                 file.write(store[n].replace('\n', '').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>','<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]').replace("यद्यपि ",'') + '\n')
-                        return process_discourse(file_path)
+                        return process_discourse(file_path_1)
                             
                     
                         # l1.append(output_line)
                 elif "तो" in sent2 :
-                    return if_to(file_path)
+                    return if_to(file_path_1)
                 
             elif ("अगर" in sent2 or "यदि" in sent2 or "यद्यपि" in sent2) :
                 # Process sentences until "तो" is encountered
@@ -208,10 +234,10 @@ def parse_discourse_lines(lines):
                             for n in range(0, len(l2)):
                                 store.append(l2[n])
 
-                            with open(file_path, 'w') as file:
+                            with open(file_path_1, 'w') as file:
                                 for n in range(len(store)):
                                     file.write(store[n].replace('\n', '').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>','<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]') + '\n')
-                            return process_discourse(file_path)
+                            return process_discourse(file_path_1)
                         else:
                             for j in range(0, i+1):
                                 l1.append(lines[j])
@@ -228,17 +254,17 @@ def parse_discourse_lines(lines):
                             for n in range(0, len(l2)):
                                 store.append(l2[n])
 
-                            with open(file_path, 'w') as file:
+                            with open(file_path_1, 'w') as file:
                                 for n in range(len(store)):
                                     file.write(store[n].replace('\n', '').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>','<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]') + '\n')
-                            return process_discourse(file_path)
+                            return process_discourse(file_path_1)
                         
                 elif sent3 and  "तो" in sent3 :
                     # print("nn")
-                    return if_to(file_path)
+                    return if_to(file_path_1)
                 
             elif "तो" in lines[i+1] :
-                return if_to(file_path)
+                return if_to(file_path_1)
             
                 # continue
             # Normal processing if "अगर" is not present in sent2
@@ -259,10 +285,10 @@ def parse_discourse_lines(lines):
                     for n in range(0, len(l2)):
                         store.append(l2[n])
 
-                    with open(file_path, 'w') as file:
+                    with open(file_path_1, 'w') as file:
                         for n in range(len(store)):
                             file.write(store[n].replace('\n', '').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>','<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]') + '\n')
-                    return process_discourse(file_path)
+                    return process_discourse(file_path_1)
                 else:
                     for j in range(0, i):
                         l1.append(lines[j])
@@ -279,13 +305,13 @@ def parse_discourse_lines(lines):
                     for n in range(0, len(l2)):
                         store.append(l2[n])
 
-                    with open(file_path, 'w') as file:
+                    with open(file_path_1, 'w') as file:
                         for n in range(len(store)):
                             file.write(store[n].replace('\n', '').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>','<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]') + '\n')
-                    return process_discourse(file_path)
+                    return process_discourse(file_path_1)
             else:
                 output_line=output_line.replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>', '<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]')
-                with open(file_path, 'w') as file:
+                with open(file_path_1, 'w') as file:
                     file.write(
                         output_line.replace('\n', '').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>', '<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]').replace('णण् ', '\n'))
                 return process_output_line(output_line)
@@ -322,10 +348,10 @@ def parse_discourse_lines(lines):
                 for n in range(0, len(l2)):
                     store.append(l2[n])
 
-                with open(file_path, 'w') as file:
+                with open(file_path_1, 'w') as file:
                     for n in range(len(store)):
                         file.write(store[n].replace('\n', '').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>','<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]') + '\n')
-                return process_discourse(file_path)
+                return process_discourse(file_path_1)
             else:
                 for j in range(0, i):
                     l1.append(lines[j])
@@ -343,10 +369,10 @@ def parse_discourse_lines(lines):
                 for n in range(0, len(l2)):
                     store.append(l2[n])
                 i+=1
-                with open(file_path, 'w') as file:
+                with open(file_path_1, 'w') as file:
                     for n in range(len(store)):
                         file.write(store[n].replace('\n', '').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>','<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]') + '\n')
-                return process_discourse(file_path)
+                return process_discourse(file_path_1)
 
     # Normal processing if "अगर" is not present in sent2
         output_line = process_sentences(sent1, sent2, id_1, id_2).replace('अगर ', '').replace('यदि ', '')
@@ -362,10 +388,10 @@ def parse_discourse_lines(lines):
                 for n in range(0, len(l2)):
                     store.append(l2[n])
 
-                with open(file_path, 'w') as file:
+                with open(file_path_1, 'w') as file:
                     for n in range(len(store)):
                         file.write(store[n].replace('\n', '').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>','<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]') + '\n')
-                return process_discourse(file_path)
+                return process_discourse(file_path_1)
             else:
                 for j in range(0, i):
                     l1.append(lines[j])
@@ -383,13 +409,13 @@ def parse_discourse_lines(lines):
                 for n in range(0, len(l2)):
                     store.append(l2[n])
             
-                with open(file_path, 'w') as file:
+                with open(file_path_1, 'w') as file:
                     for n in range(len(store)):
                         file.write(store[n].replace('\n', '').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>','<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]') + '\n')
-                return process_discourse(file_path)
+                return process_discourse(file_path_1)
         else:
             output_line=output_line.replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>', '<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]')
-            with open(file_path, 'w') as file:
+            with open(file_path_1, 'w') as file:
                 file.write(
                     output_line.replace('\n', '').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>', '<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]').replace('णण् ', '\n'))
             return process_output_line(output_line)
@@ -406,7 +432,7 @@ def if_to(file_path):
         
         sent3 = lines[i].strip()
         if "तो" in sent3:
-            # print("Processing sentence with 'तो' at line:", i)
+            print("Processing sentence with 'तो' at line:", i)
             b = i + 1
             while b < len(lines):
                 sent4 = lines[b].strip() if b<len(lines) else None
@@ -546,7 +572,7 @@ def process_output_line(output_line):
     
     modified_lines = [output_line.replace('<<o>/S_id> <<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id>', '<<o>/S_id>').replace('<<o>/S_id> <<o>/S_id> ] <<o>/S_id> <<o>/S_id>','<<o>/S_id> ]').replace('<<o>/S_id> ] <<o>/S_id>','<<o>/S_id> ]').replace('णण् ', '\n')]
     
-    with open(file_path, 'w', encoding='utf-8') as output_file:
+    with open(file_path_1, 'w', encoding='utf-8') as output_file:
         output_file.writelines(modified_lines)
 
         
@@ -656,5 +682,6 @@ def process_discourse(file_path):
 
 if __name__ == "__main__":
     file_path='sentence_output.txt'
+    file_path_1='output_discource.txt'
     # wx = WXC(order='wx2utf', lang='hin')
     process_discourse(file_path)

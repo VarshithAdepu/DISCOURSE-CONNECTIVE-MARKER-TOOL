@@ -23,7 +23,7 @@ class USR:
    def set_marker_info(self):
        #set of single word markers
            self.markers = {"Ora",'cUzki', 'cUMki',"evaM", "waWA", "wo", "kyoMki",
-               "isIlie","isalie","jabaki","yaxyapi","waWApi","Pira BI",
+               "isIlie","isalie","jabaki","yaxyapi","waWApi","Pira BI", "awaH",
                "lekina","kiMwu","paraMwu","jaba","waba","yA","aWavA", 'viparIwa',"hAlAzki"}
           
            #set of multi words marker
@@ -37,25 +37,24 @@ class USR:
                 #    "ki" : "pariNAma",
                    "evaM" : "samuccaya",
                    "waWA" : "samuccaya",
-                #    "agara" : "AvaSyakawA-pariNAma",
-                #    "yaxi" : "AvaSyakawA-pariNAma",
-                   "wo" : "AvaSyakawA-pariNAma",
-                   "nahIM wo": "AvaSyakawA-pariNAma",
-                   "kyoMki" : "kArya-kAraNa",
-                   'cUzki'  :"kArya-kAraNa",
-                   'cUMki'  :"kArya-kAraNa",
+                #    "agara" : "AvaSyakawApariNAma",
+                #    "yaxi" : "AvaSyakawApariNAma",
+                   "wo" : "AvaSyakawApariNAma",
+                   "nahIM wo": "AvaSyakawApariNAma",
+                   "kyoMki" : "kAryakAraNa",
+                   'cUzki'  :"kAryakAraNa",
+                   'cUMki'  :"kAryakAraNa",
                    "isIlie" : "pariNAma",
                    "isalie" : "pariNAma",
+                   "awaH" : "pariNAma",
                    "jabaki" : "viroXI_xyowaka",
-                   "yaxyapi" : "vyABicAra",
-                   "waWApi" : "vyABicAra",
-                   "hAlAzki" : "vyABicAra",
-                   "Pira BI" : "vyABicAra",
+                   "yaxyapi" : "vyaBicAra",
+                   "waWApi" : "vyaBicAra",
+                   "hAlAzki" : "vyaBicAra",
+                   "Pira BI" : "vyaBicAra",
                    "lekina" : "viroXI",
                    "kiMwu" : "viroXI",
                    "paraMwu" : "viroXI",
-                   "jaba" : "samAnakAla",
-                   "waba": "samAnakAla",
                    "yA": "anyawra",
                    "aWavA": "anyawra",
                    'isake pariNAmasvarUpa' : "pariNAma",
@@ -67,7 +66,7 @@ class USR:
                    'isake sAWa-sAWa' : 'samuccaya x',
                    'isake sAWa sAWa' : 'samuccaya x',
                    'isa kAraNa' : 'pariNAma',
-                   'isake kAraNa':'kArya-kAraNa',
+                   'isake kAraNa':'kAryakAraNa',
                    'isake bAvajZUxa' : 'vavicAra',
                    'nA kevala': 'samuccaya'
                    
@@ -85,9 +84,9 @@ class USR:
                "anyawra": "1",
                "samAnakAla":"0",
                "viroXI": "1",
-               "vyABicAra":"0",
-               "kArya-kAraNa": "1",
-               "AvaSyakawA-pariNAma": "0",
+               "vyaBicAra":"0",
+               "kAryakAraNa": "1",
+               "AvaSyakawApariNAma": "0",
                "samuccaya x" : 'x',
                "viroXI_xyowaka" : '1',
                "vavicAra" : 'x',
@@ -451,7 +450,7 @@ class USR:
                         prev_usr[6][pos_main_prev_usr] += final_string_to_append + ' '
                     prev_usr[7][pos_main_prev_usr] = 'nahIM_1'
 
-                elif 'AvaSyakawA-pariNAma' not in prev_usr[6] :
+                elif 'AvaSyakawApariNAma' not in prev_usr[6] :
                     # print('/////',prev_usr[6], pos_main_prev_usr)
                     usr_id = curr_filename
                     final_string_to_append = usr_id + '.' + str(pos_main_curr_usr + 1) + ':' + discourse_relation_from_sentence
