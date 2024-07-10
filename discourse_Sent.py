@@ -607,7 +607,7 @@ def process_sentences(sent1, sent2, id_1, id_2):
     h1 = sent1.split()
     h2 = sent2.split()
     # print(disc_relation)
-    # print(hindi_sent1)
+    print(hindi_sent1,'kkk')
     # print(hindi_sent2)
     # print(id_2)
 
@@ -616,7 +616,7 @@ def process_sentences(sent1, sent2, id_1, id_2):
         # output_line = f"<S_id={id_1}> {hindi_sent1} <<o>/S_id> {disc_relation} <S_id={id_2}> {hindi_sent2} <<o>/S_id>"
         output_line = ' <<'+'o'+'>S_id='+id_1+'>' + " " + hindi_sent1 + ' <<'+'o'+'>/S_id> ' + disc_relation + " " + ' <<'+'o'+'>S_id='+id_2+'>' + " " + hindi_sent2 + ' <<'+'o'+'>/S_id> '
     
-    elif h1[0]=='ना' and h1[1]=='केवल' and 'बल्कि' in hindi_sent2:
+    elif 'ना केवल' in hindi_sent1 and 'बल्कि' in hindi_sent2:
         disc_relation='समुच्चय'
         hindi_sent1 = hindi_sent1.replace('ना केवल ','')
         hindi_sent2 = hindi_sent2.replace('बल्कि ','')

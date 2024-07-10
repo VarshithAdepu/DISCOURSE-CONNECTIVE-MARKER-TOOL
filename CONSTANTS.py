@@ -6,7 +6,7 @@ COMPLEX_CONNECTIVES = {'चूँकि' : ['अतः'],
                        'अगर' : ['तो', 'तब'],
                        'यदि' : ['तो', 'तब'],
                        'यद्यपि' : ['फिर भी'],
-                    #    'ना केवल':['बल्कि'],
+                     #   'ना केवल':['बल्कि'],
                        }
 #INPUT_FILE = "parallel_corpus_verified_data - data2.tsv"
 INPUT_FILE = "sentence_input.txt"
