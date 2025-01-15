@@ -3,6 +3,7 @@ from discourse_mapped_rel import USR
 import json
 from wxconv import WXC
 import re
+from re_code import *
 from api_output_3 import *
 # Create an instance of the USR class
 usr_instance = USR()
@@ -13,12 +14,12 @@ multi_word_markers = usr_instance.multi_word_markers
 markers = usr_instance.markers
 discourse_relation = usr_instance.discourse_relation
 
-def combine_lines_with_prefix(lines):
+def combine_lines_with_prefix(lines,regex_pattern):
     # Example usage
     # combine_lines_with_prefix('sentence_output.txt', "कि")
     # with open(file_path, 'r', encoding='utf-8') as file:
     #     lines = file.readlines()
-    # print("ast",lines)
+    # #print("ast",lines)
     new_lines = []
 
     current_id = ""
@@ -29,13 +30,13 @@ def combine_lines_with_prefix(lines):
         if len(columns) >= 2:
             current_id, current_text = columns
             current_text = current_text.strip()  
-            # print(current_id)
+            # #print(current_id)
         else:
             current_text += line.strip() 
 
         if current_text.startswith('कि') and 'अगर' not in current_text:
             previous_line = new_lines[-1].rstrip(" ।")
-            # print(previous_line)
+            # #print(previous_line)
             if ('इतना'or'इतनी'or'इतने') not in previous_line:
             # if "a " in previous_line:
                 # mod_previous_line = previous_line.replace("a", "")
@@ -44,9 +45,9 @@ def combine_lines_with_prefix(lines):
                 new_lines.append(f"{current_id} {current_text}\n")
         else:
             new_lines.append(f"{current_id} {current_text}\n")
-    # print(parse_discourse_lines(new_lines),'parseeeeee')
-    print(new_lines,'newlines')
-    return parse_discourse_lines(new_lines)
+    # #print(parse_discourse_lines(new_lines),'parseeeeee')
+    #print(new_lines,'newlines')
+    return parse_discourse_lines(new_lines,regex_pattern)
 
 
 def convert_to_hindi(input_text):
@@ -64,22 +65,27 @@ def read_lines(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return file.readlines()
     
-def get_ids(sent):
+def get_ids(sent,regex_pattern):
+    # print(regex_pattern,'rrr')
+    matches = re.findall(regex_pattern, sent)
     
-    pattern1 = re.compile(r'(\w+_\w+_\w+_\w+-\w+_\d+[a-zA-Z]?)')
-    match1 = re.search(pattern1, sent)
+    # id = sent.split()[0]
+    # pattern1 = re.compile(r'(\w+_\w+_\w+_\w+-\w+_\d+[a-zA-Z]?)')
+    # match1 = re.search(pattern1, sent)
     
-    pattern2 = re.compile(r"(\d+[a-z]?)")
-    match2 = re.search(pattern2, sent)
+    # pattern2 = re.compile(r"(\d+[a-z]?)")
+    # match2 = re.search(pattern2, sent)
 
-    if match1:
-        return match1.group(1)
-    elif match2:
-        return match2.group(1)
-    else:
-        return None
+    # if match1:
+    #     return match1.group(1)
+    # elif match2:
+    #     return match2.group(1)
+    # else:
+    #     return None
+    #print(matches)
+    return matches[0]
 
-def to_check_same_ids(sent):
+def to_check_same_ids(sent,regex_pattern):
     # if '=' and'>' in sent.split()[0]:
     #     pattern = r'=(.*?)[a-zA-Z]?>'
     #     match1 = re.search(pattern, sent)
@@ -96,17 +102,19 @@ def to_check_same_ids(sent):
     #         return match1.group(1)
     #     else:
     #         return None
-    pattern1 = r"(\w+_\w+_\w+_\w+-\w+_\d+)"
-    match1 = re.search(pattern1, sent)
-    pattern2 = r"(\d+)"
-    match2 = re.search(pattern2, sent)
+    matches = re.findall(regex_pattern, sent)
+    id=remove_trailing_alphabet(matches[0])
+    # pattern1 = r"(\w+_\w+_\w+_\w+-\w+_\d+)"
+    # match1 = re.search(pattern1, sent)
+    # pattern2 = r"(\d+)"
+    # match2 = re.search(pattern2, sent)
 
-    if match1:
-        return match1.group(1)
-    elif match2:
-        return match2.group(1)
-    else:
-        return None
+    # if match1:
+    #     return match1.group(1)
+    # elif match2:
+    #     return match2.group(1)
+    # else:
+    return id
 
 def find_conjunction(sentence):
     conjunctions = ["अगर", "यदि", "यद्यपि"]
@@ -116,22 +124,22 @@ def find_conjunction(sentence):
     return None  # Return None if no conjunction is found
 
 list1=[]
-def parse_discourse_lines(lines):
+def parse_discourse_lines(lines,regex_pattern):
     l1 = []
     l2 = []
     store = []
     # i=0
     # while i<len(lines)-1:
     for i in range(len(lines)-1):
-        # print(i)
+        # #print(i)
         sent1 = lines[i].strip()
         sent2 = lines[i + 1].strip()
         
-        id1 = to_check_same_ids(sent1)
-        id2 = to_check_same_ids(sent2)
+        id1 = to_check_same_ids(sent1,regex_pattern)
+        id2 = to_check_same_ids(sent2,regex_pattern)
         
-        id_1 = get_ids(sent1)
-        id_2 = get_ids(sent2)
+        id_1 = get_ids(sent1,regex_pattern)
+        id_2 = get_ids(sent2,regex_pattern)
         
 
         if id1==id2:
@@ -145,43 +153,43 @@ def parse_discourse_lines(lines):
                     discourseMarkerParser.replaced_words_dict[id_1]= str(find_conjunction(sent1))
                     output_line=process_sentences(sent1, sent2, id_1, id_2).replace(' </S_id> </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> ] </S_id> </S_id>', ' </S_id> ]').replace(' </S_id> ] </S_id>',' </S_id> ]')
                     lines = replace_values_in_list(lines,sent1, sent2,output_line)
-                    return process_discourse(lines)
+                    return process_discourse(lines,regex_pattern)
                     
                 elif "तो" in sent2 :
-                    return if_to(lines)
+                    return if_to(lines,regex_pattern)
                 
             elif ("अगर" in sent2 or "यदि" in sent2 or "यद्यपि" in sent2) :
                 # Process sentences until "तो" is encountered
                 sent3 = lines[i + 2].strip() if i + 2 < len(lines) else None
-                # print("varSh",sent3)
+                # #print("varSh",sent3)
 
                 if sent3 and "तो" not in sent3 :
-                    # print("2")
-                    print(sent2)
-                    id1 = to_check_same_ids(sent2)
-                    id2 = to_check_same_ids(sent3)
+                    # #print("2")
+                    #print(sent2)
+                    id1 = to_check_same_ids(sent2,regex_pattern)
+                    id2 = to_check_same_ids(sent3,regex_pattern)
                     
-                    id_1 = get_ids(sent2)
-                    id_2 = get_ids(sent3)
+                    id_1 = get_ids(sent2,regex_pattern)
+                    id_2 = get_ids(sent3,regex_pattern)
                     
                     if id1 == id2:
                         discourseMarkerParser.replaced_words_dict[id_1]= str(find_conjunction(sent1))
-                        # print(discourseMarkerParser.replaced_words_dict,'ciiiiiiiiii')
+                        # #print(discourseMarkerParser.replaced_words_dict,'ciiiiiiiiii')
                         output_line = process_sentences(sent2, sent3, id_1, id_2).replace(' </S_id> </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> ] </S_id> </S_id>', ' </S_id> ]').replace(' </S_id> ] </S_id>',' </S_id> ]')
                         lines = replace_values_in_list(lines,sent2, sent3,output_line)
-                        return process_discourse(lines)
+                        return process_discourse(lines,regex_pattern)
                         
                 elif sent3 and  "तो" in sent3 :
-                    # print("nn")
-                    return if_to(lines)
+                    # #print("nn")
+                    return if_to(lines,regex_pattern)
                 
             elif "तो" in lines[i+1] :
-                return if_to(lines)
+                return if_to(lines,regex_pattern)
             # discourseMarkerParser.replaced_words_dict[id_1]= str(find_conjunction(sent1))
             output_line = process_sentences(sent1, sent2, id_1, id_2).replace('अगर ', '').replace('यदि ', '').replace("यद्यपि ",'').replace(' </S_id> </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> ] </S_id> </S_id>', ' </S_id> ]').replace(' </S_id> ] </S_id>',' </S_id> ]')
             lines = replace_values_in_list(lines,sent1,sent2,output_line)
             if len(lines) > 2:
-                return process_discourse(lines)
+                return process_discourse(lines,regex_pattern)
             else:
                 output_line=output_line.replace(' </S_id> </S_id> ] </S_id> </S_id>', ' </S_id> ]').replace(' </S_id> ] </S_id>',' </S_id> ]')
                 output_line = process_output_line(output_line)
@@ -191,28 +199,28 @@ def parse_discourse_lines(lines):
     while i<len(lines)-1:
         sent1 = lines[i].strip()
         sent2 = lines[i + 1].strip()
-        # print(sent1)
-        # print("vv")
+        # #print(sent1)
+        # #print("vv")
         if not sent2:
             continue
         
-        id_1 = get_ids(sent1)
-        id_2 = get_ids(sent2)
+        id_1 = get_ids(sent1,regex_pattern)
+        id_2 = get_ids(sent2,regex_pattern)
 
         # Check if "अगर" is present in sent2
         if "अगर" in sent2 or "यदि" in sent2 or "यद्यपि" in sent2 :
             # Process with the next sentence
             sent3 = lines[i + 2].strip() if i + 2 < len(lines) else None
             discourseMarkerParser.replaced_words_dict[id_2]= str(find_conjunction(sent1))
-            output_line_next = process_sentences(sent2, sent3, id_2, get_ids(sent3)) if sent3 else None
+            output_line_next = process_sentences(sent2, sent3, id_2, get_ids(sent3,regex_pattern)) if sent3 else None
             lines = replace_values_in_list(lines,sent2,sent3,output_line_next)
 
             # Process with the current sentence and the next one
             discourseMarkerParser.replaced_words_dict[id_1]= str(find_conjunction(sent1))
-            output_line_current = process_sentences(sent1, output_line_next , id_1, get_ids(output_line_next)) if output_line_next else None
+            output_line_current = process_sentences(sent1, output_line_next , id_1, get_ids(output_line_next,regex_pattern)) if output_line_next else None
             lines = replace_values_in_list(lines,sent1,output_line_next,output_line_current)
 
-            return process_discourse(lines)
+            return process_discourse(lines,regex_pattern)
 
     # Normal processing if "अगर" is not present in sent2
         # discourseMarkerParser.replaced_words_dict[id_1]= str(find_conjunction(sent1))
@@ -222,11 +230,11 @@ def parse_discourse_lines(lines):
             if i == 0:
                 output_line = output_line.replace('अगर ', '').replace('यदि ', '').replace("यद्यपि ",'')
                 lines = replace_values_in_list(lines,sent1,sent2,output_line)
-                return process_discourse(lines)
+                return process_discourse(lines,regex_pattern)
             else:
                 output_line = output_line.strip().replace('अगर ', '').replace('यदि ', '')
                 lines = replace_values_in_list(lines,sent1,sent2,output_line)
-                return process_discourse(lines)
+                return process_discourse(lines,regex_pattern)
         else:
             output_line = output_line.replace(' </S_id> </S_id> ] </S_id> </S_id>', ' </S_id> ]').replace(' </S_id> ] </S_id>',' </S_id> ]')
             lines = replace_values_in_list(lines,sent1,sent2,output_line)
@@ -255,71 +263,71 @@ def replace_values_in_list(lines, value1, value2, output):
         if lines[i].strip() == str(value1) and lines[i+1].strip() == str(value2):
             lines[i:i+2] = [output]
             # del lines[i+1]
-            print(lines,'lines')
+            #print(lines,'lines')
             updated_list = lines
             break
         i += 1  # Move to the next element
     return lines
 
-def if_to(lines):
+def if_to(lines,regex_pattern):
     store = []
     l1 = []
     l2 = []
     # with open(file_path, 'r') as file:
     #     lines = file.readlines()
-    # print(lines)
+    # #print(lines)
     for i in range(len(lines)):
         
         sent3 = lines[i].strip()
         if "तो" in sent3:
-            print("Processing sentence with 'तो' at line:", i)
+            #print("Processing sentence with 'तो' at line:", i)
             b = i + 1
             while b < len(lines):
                 sent4 = lines[b].strip() if b<len(lines) else None
-                if sent4 and 'तो' not in sent4 and to_check_same_ids(sent3) == to_check_same_ids(sent4):
-                    # print("Processing sentences following 'तो' until IDs match at line:", b)
-                    discourseMarkerParser.replaced_words_dict[get_ids(sent3)] = str(find_conjunction(sent3))
-                    output_line_current = process_sentences(sent3, sent4,get_ids(sent3),get_ids(sent4)).replace(' </S_id> </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> ] </S_id> </S_id>', ' </S_id> ]').replace(' </S_id> ] </S_id>',' </S_id> ]')
+                if sent4 and 'तो' not in sent4 and to_check_same_ids(sent3,regex_pattern) == to_check_same_ids(sent4,regex_pattern):
+                    # #print("Processing sentences following 'तो' until IDs match at line:", b)
+                    discourseMarkerParser.replaced_words_dict[get_ids(sent3,regex_pattern)] = str(find_conjunction(sent3))
+                    output_line_current = process_sentences(sent3, sent4,get_ids(sent3,regex_pattern),get_ids(sent4,regex_pattern)).replace(' </S_id> </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> ] </S_id> </S_id>', ' </S_id> ]').replace(' </S_id> ] </S_id>',' </S_id> ]')
                     lines = replace_values_in_list(lines,sent3,sent4,output_line_current)
-                    return process_discourse(lines)
+                    return process_discourse(lines,regex_pattern)
                     #     return process_discourse(file_path)
                 else:
                     a = i - 1
                     sent1 = lines[a].strip()
                     sent2 = lines[a + 1].strip()
-                    id1 = to_check_same_ids(sent1)
-                    id2 = to_check_same_ids(sent2)
-                    # print("Processing sentences preceding 'तो' until IDs match at line:", a)
+                    id1 = to_check_same_ids(sent1,regex_pattern)
+                    id2 = to_check_same_ids(sent2,regex_pattern)
+                    # #print("Processing sentences preceding 'तो' until IDs match at line:", a)
                     while a >= 0 and id1 == id2:
-                        # print("pk")
-                        # print(lines[a])
+                        # #print("pk")
+                        # #print(lines[a])
                         
-                        id_1 = get_ids(sent1)
-                        id_2 = get_ids(sent2)
+                        id_1 = get_ids(sent1,regex_pattern)
+                        id_2 = get_ids(sent2,regex_pattern)
                         discourseMarkerParser.replaced_words_dict[id_1] = str(find_conjunction(sent1))
                         output_line = process_sentences(sent1, sent2, id_1, id_2).replace('अगर ', '').replace('यदि ', '').replace(' </S_id> </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> ] </S_id> </S_id>', ' </S_id> ]').replace(' </S_id> ] </S_id>',' </S_id> ]')
                         lines = replace_values_in_list(lines, sent1, sent2, output_line)
-                        return process_discourse(lines)
+                        return process_discourse(lines,regex_pattern)
                     else:
                         break
             
             else:
                 a = i - 1
-                print("Processing sentences preceding 'तो' until IDs match at line:", a)
+                #print("Processing sentences preceding 'तो' until IDs match at line:", a)
                 while a >= 0:
-                    # print("kk")
-                    # print(lines[a])
+                    # #print("kk")
+                    # #print(lines[a])
                     sent1 = lines[a].strip()
                     sent2 = lines[a + 1].strip()
-                    id1 = to_check_same_ids(sent1)
-                    id2 = to_check_same_ids(sent2)
-                    id_1 = get_ids(sent1)
-                    id_2 = get_ids(sent2)
+                    id1 = to_check_same_ids(sent1,regex_pattern)
+                    id2 = to_check_same_ids(sent2,regex_pattern)
+                    id_1 = get_ids(sent1,regex_pattern)
+                    id_2 = get_ids(sent2,regex_pattern)
                     if id1 == id2:
                         discourseMarkerParser.replaced_words_dict[id_1] = str(find_conjunction(sent1))
                         output_line = process_sentences(sent1, sent2, id_1, id_2).replace('अगर ', '').replace('यदि ', '').replace(' </S_id> </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id>', ' </S_id>').replace(' </S_id> </S_id> ] </S_id> </S_id>', ' </S_id> ]').replace(' </S_id> ] </S_id>',' </S_id> ]')
                         lines = replace_values_in_list(lines,sent1,sent2,output_line)
-                        return process_discourse(lines)
+                        return process_discourse(lines,regex_pattern)
                     else:
                         break        
                 b += 1
@@ -338,12 +346,12 @@ def get_discourse_from_word(sentence):
        
        sent=convert_to_eng(sentence)
        sent = sent.split()
-    #    print('ss',sent)
+    #    #print('ss',sent)
        s = sent[0]
 
        for i in range(len(sent) - 1):
            if s in markers or s in multi_word_markers:
-                # print(s)
+                # #print(s)
                 return discourse_relation[s]
            else:
                s += ' ' + sent[i+1]
@@ -364,13 +372,13 @@ def process_sentences(sent1, sent2, id_1, id_2):
     relation = results[3]
     wx_converter = WXC(order='wx2utf', lang='hin')
     hindi_dict = {key: wx_converter.convert(value) for key, value in relation.items()}
-    print(hindi_dict,'relation')
+    #print(hindi_dict,'relation')
     h1 = sent1.split()
     h2 = sent2.split()
-    # print(disc_relation)
-    # print(hindi_sent1,'kkk')
-    # print(hindi_sent2)
-    # print(id_2)
+    # #print(disc_relation)
+    # #print(hindi_sent1,'kkk')
+    # #print(hindi_sent2)
+    # #print(id_2)
 
     if ('इतना'or'इतनी'or'इतने') in hindi_sent1:
         disc_relation='परिणाम'
@@ -392,7 +400,7 @@ def process_sentences(sent1, sent2, id_1, id_2):
     elif results[1] in parser.discourse_pos and parser.discourse_pos[results[1]] == "0":
         output_line = ' <S_id='+id_2+'>' + " " + hindi_sent2 + ' </S_id> ' + '[ ' + disc_relation + ' <S_id='+id_1+'>' + " " + hindi_sent1 + ' </S_id> '+'] '
         # output_line=output_line.replace(' </S_id> </S_id> ] </S_id> </S_id> ]',' </S_id> ]')
-        # print('oo',output_line)
+        # #print('oo',output_line)
 
     elif results[1] =="samuccaya x"  and parser.discourse_pos[results[1]] == 'x':
         if h2[1]=='इसके' and h2[2]=='अलावा' and '?' not in hindi_sent2 and 'नहीं' not in hindi_sent2:
@@ -451,17 +459,17 @@ def convert_json_to_discourse_input(json_input):
 
     return discourse_input.strip(),project_id
 
-def process_discourse(lines):
+def process_discourse(lines,regex_pattern):
     # lines = read_lines(file_path)
     if len(lines) < 2:
         line = lines[0].split()
-        id_val = get_ids(lines[0].strip())
+        id_val = get_ids(lines[0].strip(),regex_pattern)
         hindi_sent = convert_to_hindi(lines[0].strip())
-        # print(f"<S_id={id_val}> {hindi_sent} </S_id>")
-        print(hindi_sent,'hindiiiiiii')
+        # #print(f"<S_id={id_val}> {hindi_sent} </S_id>")
+        #print(hindi_sent,'hindiiiiiii')
         return hindi_sent
     else:
-        combine_lines_with_prefix(lines)
+        combine_lines_with_prefix(lines,regex_pattern)
         return updated_list,hindi_dict
 
 if __name__ == "__main__":
@@ -478,44 +486,44 @@ if __name__ == "__main__":
     input = {
     "sentences": [
         {
-            "project_id": 1,
-            "sentence_id": "1",
+            "project_id": "1",
+            "sentence_id": "story_1",
             "sentence": "मनु ने एक दिन बनारस से दिल्ली तक पैदल जाने की योजना बनाई ।"
         },
         {
-            "project_id": 1,
-            "sentence_id": "2a",
+            "project_id": "1",
+            "sentence_id": "story_2a",
             "sentence": "पर उसे ये मालूम नहीं था ।"
         },
         {
-            "project_id": 1,
-            "sentence_id": "2b",
+            "project_id": "1",
+            "sentence_id": "story_2b",
             "sentence": "कि उस दिन बारिश होगी ।"
         },
         {
-            "project_id": 1,
-            "sentence_id": "2c",
+            "project_id": "1",
+            "sentence_id": "story_2c",
             "sentence": "या बारिश नहीं होगी ।"
         },
         {
-            "project_id": 1,
-            "sentence_id": "3",
+            "project_id": "1",
+            "sentence_id": "story_3",
             "sentence": "इसलिये उसने एक दस ईंच का छाता ले लिया ।"
         },
         {
-            "project_id": 1,
-            "sentence_id": "4a",
-            "sentence": "मनु सुबह सात बजे चलना शुरू किया |"
+            "project_id": "1",
+            "sentence_id": "story_4a",
+            "sentence": "मनु सुबह सात बजे चलना शुरू किया ।"
         },
         {
-            "project_id": 1,
-            "sentence_id": "4b",
+            "project_id": "1",
+            "sentence_id": "story_4b",
             "sentence": "तभी अचानक तुफान आ गया ।"
         },
         {
-            "project_id": 1,
-            "sentence_id": "4c",
-            "sentence": "और छाता उड़ गया ।"
+            "project_id": "1",
+            "sentence_id": "story_4c",
+            "sentence": "और छाता उड गया ।"
         }
     ]
 }
@@ -523,15 +531,17 @@ if __name__ == "__main__":
     # Convert JSON to the string format used by process_discourse
     line = '\n'.join([f"{sentence['sentence_id']} {sentence['sentence']}" for sentence in input['sentences']])
     # Assuming all sentences belong to the same project_id
+    all_ids=[sentence['sentence_id'] for sentence in input['sentences']]
+    regex_pattern = create_dynamic_regex(all_ids)
     project_id = input["sentences"][0]["project_id"]
     # lines,project_id = convert_json_to_discourse_input(input)
-    print(line,'llllll')
+    print(regex_pattern,'llllll')
     lines = line.split('\n')
-    output,hindi_dict = process_discourse(lines)
-    print("Final output from the last call:", output,hindi_dict)
+    output,hindi_dict = process_discourse(lines,regex_pattern)
+    #print("Final output from the last call:", output,hindi_dict)
     output_string = " ".join(output)
     final = parse_output(hindi_dict,output_string,project_id)
     with open('parsed_output.json', 'w', encoding='utf-8') as json_file:
         json.dump(final, json_file, ensure_ascii=False, indent=4)
-    print(final,'output')
-    print(output,'output')
+    #print(final,'output')
+    #print(output,'output')

@@ -580,7 +580,7 @@ def get_discourse_from_word(sentence):
        
        sent=convert_to_eng(sentence)
        sent = sent.split()
-       print('ss',sent)
+    #    print('ss',sent)
        s = sent[0]
 
        for i in range(len(sent) - 1):

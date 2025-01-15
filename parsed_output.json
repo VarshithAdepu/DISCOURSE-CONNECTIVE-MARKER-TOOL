@@ -1,0 +1,68 @@
+[
+    {
+        "project_id": "1",
+        "discourse_marker": "None",
+        "discourse_relation": "समुच्चय",
+        "sent_1": "मनु ने एक दिन बनारस से दिल्ली तक पैदल जाने की योजना बनाई",
+        "sent_1_id": "story_1",
+        "sent_2": "पर उसे ये मालूम नहीं था कि उस दिन बारिश होगी",
+        "sent_2_id": "story_2a",
+        "head_sent_id": "None",
+        "dependent_sent_id": "None"
+    },
+    {
+        "project_id": "1",
+        "discourse_marker": "या",
+        "discourse_relation": "अन्यत्र",
+        "sent_1": "पर उसे ये मालूम नहीं था कि उस दिन बारिश होगी",
+        "sent_1_id": "story_2a",
+        "sent_2": "बारिश नहीं होगी",
+        "sent_2_id": "story_2c",
+        "head_sent_id": "None",
+        "dependent_sent_id": "None"
+    },
+    {
+        "project_id": "1",
+        "discourse_marker": "None",
+        "discourse_relation": "समुच्चय",
+        "sent_1": "बारिश नहीं होगी",
+        "sent_1_id": "story_2c",
+        "sent_2": "इसलिये उसने एक दस ईंच का छाता ले लिया",
+        "sent_2_id": "story_3",
+        "head_sent_id": "None",
+        "dependent_sent_id": "None"
+    },
+    {
+        "project_id": "1",
+        "discourse_marker": "None",
+        "discourse_relation": "समुच्चय",
+        "sent_1": "इसलिये उसने एक दस ईंच का छाता ले लिया",
+        "sent_1_id": "story_3",
+        "sent_2": "मनु सुबह सात बजे चलना शुरू किया",
+        "sent_2_id": "story_4a",
+        "head_sent_id": "None",
+        "dependent_sent_id": "None"
+    },
+    {
+        "project_id": "1",
+        "discourse_marker": "None",
+        "discourse_relation": "समुच्चय",
+        "sent_1": "मनु सुबह सात बजे चलना शुरू किया",
+        "sent_1_id": "story_4a",
+        "sent_2": "तभी अचानक तुफान आ गया",
+        "sent_2_id": "story_4b",
+        "head_sent_id": "None",
+        "dependent_sent_id": "None"
+    },
+    {
+        "project_id": "1",
+        "discourse_marker": "और",
+        "discourse_relation": "समुच्चय",
+        "sent_1": "तभी अचानक तुफान आ गया",
+        "sent_1_id": "story_4b",
+        "sent_2": "छाता उड गया",
+        "sent_2_id": "story_4c",
+        "head_sent_id": "None",
+        "dependent_sent_id": "None"
+    }
+]

@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Python3: Debug",
+        "type": "debugpy",
+        "request": "launch",
+        "program": "/home/varshith/DISCOURSE_CONNECTIVE_MARKER_TOOL/discource_sent_2.py",
+        // "args": ["verified_sentences/062"], 
+        // "args": ["updated/example26"],
+        // "args": ["discource_sentences/097"],
+        // "args": ["construction/03"],
+        "cwd": "/home/varshith/DISCOURSE_CONNECTIVE_MARKER_TOOL",
+        "console": "integratedTerminal"
+      }
+    ]
+  }
